@@ -1,0 +1,584 @@
+<!--
+    TODO
+        circuit-component
+            change voltage value?
+        circuit-wrapper
+            hover over component to see stats
+        circuit-graph
+            show curves
+-->
+
+<html>
+    <head>
+        <title>Circuits</title>
+    </head>
+
+    <style>
+        circuit-component {
+            display: flex;
+            flex: 1;
+            border: solid 2px;
+        }
+
+        circuit-component[series] {
+            flex-direction: column;
+        }
+        circuit-component[parallel] {
+            flex-direction: row;
+        }
+    </style>
+
+    <style>
+        circuit-wrapper {
+            display: grid;
+            grid-template-columns: auto auto auto 1fr;
+            grid-template-rows: auto auto 1fr;
+        }
+        circuit-wrapper > circuit-component {
+            grid-column: 2;
+            grid-row: 2;
+        }
+        circuit-wrapper > span {
+            font-size: 24px;
+        }
+        circuit-wrapper > span[data-x] {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        circuit-wrapper > span[data-y] {
+            grid-column: 1;
+            grid-row: 2;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+    </style>
+
+    <style>
+        #slides > div:not([selected]) {
+            display: none;
+        }
+    </style>
+
+    <script data-hide>
+        var offset = Date.now();
+    </script>
+
+    <body>
+        <div id="slides">
+            <div selected>
+                <h1>Resistor</h1>
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" onupdate="//this.setAttribute('voltage', Math.sin(Date.now()/1000));" series voltage="1">
+                        <circuit-component resistance="1"></circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+
+            <div>
+                <h1>Series</h1>
+                <!-- https://www.allaboutcircuits.com/textbook/direct-current/chpt-5/what-are-series-and-parallel-circuits/  -->
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" onupdate="//this.setAttribute('voltage', Math.sin(Date.now()/1000));" series voltage="1">
+                        <circuit-component resistance="1"></circuit-component>
+                        <circuit-component resistance="2"></circuit-component>
+                        <circuit-component resistance="3"></circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+
+            <div>
+                <h1>Parallel</h1>
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" parallel voltage="1">
+                        <circuit-component resistance="1"></circuit-component>
+                        <circuit-component resistance="2"></circuit-component>
+                        <circuit-component resistance="3"></circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+
+            <div>
+                <h1>Series and Parallel</h1>
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" series voltage="1">
+                        <circuit-component resistance="1"></circuit-component>
+                        <circuit-component parallel>
+                            <circuit-component resistance="2"></circuit-component>
+                            <circuit-component resistance="3"></circuit-component>
+                        </circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+
+            <div>
+                <h1>Complex Circuit</h1>
+                <!-- https://www.electronics-tutorials.ws/resistor/res_5.html -->
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" series voltage="1">
+                        <circuit-component resistance=".6" id="R1"></circuit-component>
+                        <circuit-component parallel id="RD">
+                            <circuit-component resistance=".8" id="R2"></circuit-component>
+                            <circuit-component series>
+                                <circuit-component resistance=".4" id="R3"></circuit-component>
+                                <circuit-component parallel id="RC">
+                                        <circuit-component resistance=".8" id="R4"></circuit-component>
+                                        <circuit-component series>
+                                            <circuit-component resistance=".4" id="R5"></circuit-component>
+                                            <circuit-component parallel id="RB">
+                                                <circuit-component resistance=".6" id="R6"></circuit-component>
+                                                <circuit-component series>
+                                                    <circuit-component resistance=".8" id="R7"></circuit-component>
+                                                    <circuit-component parallel id="RA">
+                                                        <circuit-component resistance=".6" id="R9"></circuit-component>
+                                                        <circuit-component series>
+                                                            <circuit-component resistance="1.0" id="R8"></circuit-component>
+                                                            <circuit-component resistance=".2" id="R10"></circuit-component>
+                                                        </circuit-component>
+                                                    </circuit-component>
+                                                </circuit-component>
+                                            </circuit-component>
+                                        </circuit-component>
+                                </circuit-component>
+                            </circuit-component>
+                        </circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+
+            <div>
+                <h1>Capacitor</h1>
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" series voltage="1">
+                        <circuit-component resistance="1"></circuit-component>
+                        <circuit-component capacitance="10"></circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+
+            <div>
+                <h1>Inductor</h1>
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" series voltage="1">
+                        <circuit-component resistance="1"></circuit-component>
+                        <circuit-component inductance="1"></circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+
+            <div>
+                <h1>Wheatstone Bridge</h1>
+                <!-- https://www.allaboutcircuits.com/textbook/direct-current/chpt-8/bridge-circuits/ -->
+                <circuit-wrapper>
+                    <circuit-component data-width="500", data-height="500" series voltage="1">
+                        <circuit-component parallel>
+                            <circuit-component resistance="1" id="ra"></circuit-component>
+                            <circuit-component resistance="2" id="r1"></circuit-component>
+                        </circuit-component>
+                        <circuit-component parallel>
+                            <circuit-component resistance="1" id="rb"></circuit-component>
+                            <circuit-component resistance="4" id="r2"></circuit-component>
+                        </circuit-component>
+                    </circuit-component>
+                </circuit-wrapper>
+            </div>
+        </div>
+
+        <script>
+            const slides = document.getElementById("slides");
+            var selectedSlide = slides.querySelector(`[selected]`);
+            var selectedIndex = Array.from(slides.children).indexOf(selectedSlide);
+
+            window.addEventListener("keydown", event => {
+                switch(event.key) {
+                    case "ArrowRight":
+                    case "ArrowLeft":
+                        selectedSlide.removeAttribute("selected");
+                        selectedIndex = (event.key == "ArrowRight")?
+                            Math.min(slides.children.length-1, selectedIndex+1):
+                            Math.max(0, selectedIndex-1);
+                        selectedSlide = Array.from(slides.children)[selectedIndex];
+                        selectedSlide.setAttribute("selected", '');
+
+                        Array.from(selectedSlide.querySelectorAll("[capacitance]")).forEach(capacitor => {
+                            capacitor.charge = 0;
+                        });
+                        offset = Date.now();
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            var setSource = false;
+            window.addEventListener("keypress", event => {
+                if(event.key == 'v')
+                    setSource = !setSource;
+            });
+            window.addEventListener("mousemove", event => {
+                if(setSource) {
+                    const source = selectedSlide.querySelector("circuit-component");
+                    if(source.type == "voltage") {
+                        source.setAttribute("voltage", source.voltage - event.movementY/100);
+                    }
+                    else {
+                        source.setAttribute("current", source.current + event.movementX/100);
+                    }
+                }
+            });
+        </script>
+    </body>
+
+    <script>
+        class CircuitComponentElement extends HTMLElement {
+            constructor() {
+                super();
+
+                this.current = this.voltage = this.power = 0;
+                this.impedance = Infinity;
+
+                this.addEventListener("mousedown", event => {
+                    this.setAttribute("data-selected", '');
+                });
+                window.addEventListener("mousemove", event => {
+                    if(this.isLeaf && this.isSelected) {
+                        const newValue = Math.max(0, Number(this.getAttribute(this.propertyName)) - (event.movementY/100));
+                        this.setAttribute(this.propertyName, newValue);
+                        this.dispatchEvent(new CustomEvent(`${this.propertyName}change`), {
+                            bubbles : false,
+                            detail : {[this.propertyName] : newValue},
+                        });
+                    }
+                });
+                this.addEventListener("mouseenter", event => {
+                    this.setAttribute("data-hover", '');
+                })
+                window.addEventListener("mouseout", event => {
+                    this.removeAttribute("data-hover");
+                });
+                window.addEventListener("mouseup", event => {
+                    this.removeAttribute("data-selected");
+                });
+            }
+
+            static get observedAttributes() {
+                return [
+                    "voltage", "current",
+                    "resistance", "capacitance", "inductance",
+                    "bind",
+                    "onupdate", "onupdateimpedance", "ondraw",
+                    "onresistancechange", "oncapacitancechange", "oninductancechange", "onchargefull", "onchargeempty",
+                ];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                if(this.bindingElement == undefined) {
+                    switch(name) {
+                        case "voltage":
+                        case "current":
+                            if(!isNaN(newValue)) {
+                                const otherName = (name == "voltage")?
+                                    "current":
+                                    "voltage";
+                                this.removeAttribute(otherName);
+                                this[name] = Number(newValue);
+                            }
+                            break;
+                        
+                        case "resistance":
+                        case "capacitance":
+                        case "inductance":
+                            if(!isNaN(newValue) && Number(newValue) > 0) {
+                                ["resistance", "capacitance", "inductance"].filter(_name => (_name !== name)).forEach(name => this.removeAttribute(name));
+                                this[name] = Number(newValue);
+                            }
+                            break;
+    
+                        case "bind":
+                            if(newValue == null) {
+                                delete this.bindingElement;
+                            }
+                            else {
+                                const bindingElement = document.getElementById(newValue);
+                                if(bindingElement !== null && bindingElement instanceof CircuitComponentElement && this.type == bindingElement.type) {
+                                    this.bindingElement = bindingElement;
+                                }
+                            }
+                            break;
+    
+                        default:
+                            this.addEventListener(name.slice(2), function(event) {
+                                eval(newValue);
+                            });
+                            break;
+                    }
+    
+                    Array.from(document.querySelectorAll(`[bind="${this.id}"]`)).forEach(listener => {
+                        listener.setAttribute(name, newValue);
+                    });
+                }
+                else {
+                    
+                }
+            }
+
+            update() {
+                if(this.isRoot) {
+                    const impedance = this._updateImpedance();
+
+                    if(this.type == "voltage")
+                        this.current = this.voltage / impedance;
+                    else
+                        this.voltage = this.current * impedance;
+
+                    this.power = this.current * this.voltage;
+                }
+                else {
+                    if(this.type == "inductor")
+                        this.previousCurrent = this.current;
+
+                    if(this.parentElement.isSeries) {
+                        this.current = this.parentElement.current;
+                        this.voltage = this.parentElement.voltage * (this.impedance / this.parentElement.impedance);
+                    }
+                    else {
+                        this.voltage = this.parentElement.voltage;
+                        this.current = this.voltage / this.impedance;
+                    }
+                    
+                    this.power = this.current * this.voltage;
+
+                    switch(this.type) {
+                        case "capacitor":
+                            this.charge += (this.current * (this.constructor.rate/1000));
+                            if(Math.abs(this.charge) > Number(this.getAttribute("capacitance"))) {
+                                this.charge = Number(this.getAttribute("capacitance")) * Math.sign(this.charge);
+                                this.dispatchEvent(new CustomEvent("chargefull", {
+                                    bubbles : false,
+                                    detail : {
+                                        
+                                    }
+                                }));
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                this.dispatchEvent(new CustomEvent("update", {
+                    bubbles : false,
+                    detail : {
+                        
+                    }
+                }));
+
+                Array.from(this.querySelectorAll(`circuit-component`)).forEach(child => {
+                    child.update();
+                });
+            }
+
+            _updateImpedance() {
+                var impedance = Infinity;
+                switch(this.type) {
+                    case "resistor":
+                        impedance = Number(this.getAttribute("resistance"));
+                        break;
+                    case "capacitor":
+                        this.charge = this.charge || 0;
+                        const amountCharged = Math.abs(this.charge / Number(this.getAttribute("capacitance")));
+                        impedance = this.constructor.Infinity * amountCharged;
+                        break;
+                    case "inductor":
+                        this.previousCurrent = this.previousCurrent || 0;
+                        const currentDelta = Math.abs(this.current - this.previousCurrent);
+                        impedance = Number(this.getAttribute("inductance")) * currentDelta;
+                        break;
+                    default:
+                        const childImpedances = Array.from(this.children).map(child => child._updateImpedance());
+                        const sum = childImpedances.reduce((sum, impedance) => this.isSeries? sum+impedance : sum+(1/impedance), 0);
+                        impedance = this.isSeries?
+                            sum :
+                            1/sum;
+                        break;
+                }
+
+                this.dispatchEvent(new CustomEvent("updateimpedance", {
+                    bubbles : false,
+                    detail : {
+                        impedance,
+                    }
+                }));
+
+                this.impedance = impedance;
+                return impedance;
+            }
+
+            draw() {
+                if(this.isRoot) {
+                    this.style.width = Number(this.dataset.width) * Math.abs(this.current);
+                    this.style.height = Number(this.dataset.height) * Math.abs(this.voltage);
+                }
+                else {
+                    if(this.parentElement.isSeries) {
+                        this.style.flex = ("flex", Math.abs(this.voltage/this.parentElement.voltage));
+                    }
+                    else {
+                        this.style.flex = ("flex", Math.abs(this.current/this.parentElement.current));
+                    }
+
+                    switch(this.type) {
+                        case "capacitor":
+                            const amountCharged = Math.abs(this.charge / Number(this.getAttribute("capacitance")));
+                            this.style.backgroundColor = `hsl(${(this.charge > 0)? 128:0}, 100%, ${15 + (amountCharged*85)}%)`;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                this.dispatchEvent(new CustomEvent("draw", {
+                    bubbles : false,
+                    detail : {
+                        
+                    }
+                }));
+
+                Array.from(this.querySelectorAll(`circuit-component`)).forEach(child => {
+                    child.draw();
+                });
+            }
+
+            get type() {
+                if(this.isLeaf) {
+                    if(this.getAttribute(`resistance`) !== null) {
+                        return "resistor"
+                    }
+                    else if(this.getAttribute("capacitance") !== null) {
+                        return "capacitor";
+                    }
+                    else if(this.getAttribute("inductance") !== null) {
+                        return "inductor";
+                    }
+                }
+                else if(this.isRoot) {
+                    if(this.getAttribute("current") !== null) {
+                        return "current";
+                    }
+                    else {
+                        return "voltage";
+                    }
+                }
+            }
+
+            get propertyName() {
+                return this.constructor.typeProperties[this.type];
+            }
+
+            get isRoot() {
+                return !(this.parentElement instanceof CircuitComponentElement);
+            }
+            get isLeaf() {
+                return (this.querySelectorAll(`circuit-component`).length == 0);
+            }
+
+            get isSeries() {
+                return (this.getAttribute("series") !== null);
+            }
+            get isParallel() {
+                return !isSeries();
+            }
+
+            get isSelected() {
+                return (this.getAttribute(`data-selected`) !== null)
+            }
+
+            static get roots() {
+                return document.querySelectorAll(`:not(circuit-component) > circuit-component`);
+            }
+            static get elements() {
+                return document.getElementsByTagName(`circuit-component`);
+            }
+            static update() {
+                this.roots.forEach(root => root.update());
+            }
+            static draw() {
+                this.roots.forEach(root => root.draw());
+            }
+        }
+
+        Object.defineProperties(CircuitComponentElement, {
+            typeProperties : {
+                value : {
+                    resistor : "resistance",
+                    capacitor : "capacitance",
+                    inductor : "inductance",
+                }
+            },
+            Infinity : {
+                value : 100,
+            },
+            rate : {
+                value : 12,
+            }
+        });
+
+        customElements.define("circuit-component", CircuitComponentElement);
+    </script>
+
+    <script>
+        class CircuitWrapper extends HTMLElement {
+            constructor() {
+                super();
+                this.innerHTML += `
+                    <span data-x>
+                        Current: <span data-current></span>
+                        <br>
+                        Impedance: <span data-impedance></span>
+                        <br>
+                        Power: <span data-power></span>
+                    </span>
+                    <span data-y>Voltage: <span data-voltage></span></span>
+                `;
+                this.circuit = this.querySelector("circuit-component");
+                this.spans = {
+                    current : this.querySelector(`span[data-current]`),
+                    voltage : this.querySelector(`span[data-voltage]`),  
+                    impedance : this.querySelector(`span[data-impedance]`),
+                    power : this.querySelector(`span[data-power]`),                 
+                }
+            }
+
+            draw() {
+                for(let name in this.spans) {
+                    this.spans[name].innerText = this.circuit[name].toFixed(2);
+                }
+            }
+
+            static draw() {
+                this.elements.forEach(element => element.draw());
+            }
+
+            static get elements() {
+                return Array.from(document.getElementsByTagName("circuit-wrapper"));
+            }
+        }
+
+        customElements.define("circuit-wrapper", CircuitWrapper);
+    </script>
+
+    <script>
+        const animationFrameCallback = () => {
+            CircuitComponentElement.draw();
+            CircuitWrapper.draw();
+            requestAnimationFrame(animationFrameCallback);
+        }
+        requestAnimationFrame(animationFrameCallback);
+    </script>
+
+    <script>
+        var intervalId = setInterval(() => {
+            CircuitComponentElement.update();
+        }, CircuitComponentElement.rate);
+    </script>
+</html>
